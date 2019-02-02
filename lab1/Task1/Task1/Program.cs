@@ -26,7 +26,7 @@ namespace Task1
             string s = Console.ReadLine(); //input list of number
             string[] arr = s.Split(); //split each other by space
             int[] p = new int[n]; //create array of numbers
-            List<int> list = new List<int>(); //create list, where hold prime numbers
+            List<int> list = new List<int>(); //create list, where hold prime num
             for (int i = 0; i < n; i++)
                 p[i] = int.Parse(arr[i]); //convert each string into int
             for (int i = 0; i < n; i++)
