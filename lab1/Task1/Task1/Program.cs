@@ -8,11 +8,11 @@ namespace Task1
 {
     class Program
     {
-        static bool prime(int k)
+        static bool prime(int k) //function to check is prime
         {
             if (k == 1)
                 return false;
-            for (int i = 2; i <= Math.Sqrt(k); i++)
+            for (int i = 2; i <= Math.Sqrt(k); i++) //for able to take root of number
             {
                 if (k % i == 0)
                     return false;

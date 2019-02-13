@@ -14,7 +14,7 @@ namespace Task1
             int cursor = 0; //global variables of class
             string path;
             DirectoryInfo directory;
-            FileSystemInfo[] fs;
+            FileSystemInfo[] fs = new FileSystemInfo[70];
             int begin = 0;
             int end = 10;
             int sz;
@@ -83,10 +83,17 @@ namespace Task1
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.Clear();
                 Console.WriteLine(" File Explorer: {0} ", path); //out main directory
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.WriteLine(" Open: Enter  |  Delete: Del  |  Rename: F2  |  Back: Backspace  |  Exit: Escape ");
                 directory = new DirectoryInfo(path);  //init
-                fs = directory.GetFileSystemInfos();
-                sz = fs.Length;
-                for (int i = begin; i < Math.Min(end,fs.Length); i++) //show all subdirectories and files of directory 
+                DirectoryInfo[] di = directory.GetDirectories();
+                FileInfo[] fi = directory.GetFiles();
+                for (int i = 0; i < di.Length; i++)
+                    fs[i] = di[i];
+                for (int i = 0; i < fi.Length; i++)
+                    fs[i + di.Length] = fi[i];
+                sz = di.Length + fi.Length;
+                for (int i = begin; i < Math.Min(end,sz); i++) //show all subdirectories and files of directory 
                 {
                     Check_Type(fs[i], i); //coloring
                     Console.WriteLine("{0}. {1}", i+1, fs[i].Name); //ordering
@@ -137,8 +144,9 @@ namespace Task1
                     }
                     if (consoleKey.Key == ConsoleKey.F2) //rename file and directory name
                     {
-                        Console.Clear();
+                        Console.WriteLine("Please write new name, to rename {0}", fs[cursor].FullName);
                         string name = Console.ReadLine();
+                        
                         if (fs[cursor].GetType() == typeof(FileInfo))
                         {
                             string begin = path + '/' + fs[cursor].Name;
