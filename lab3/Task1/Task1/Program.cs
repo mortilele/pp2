@@ -96,7 +96,14 @@ namespace Task1
                 for (int i = begin; i < Math.Min(end,sz); i++) //show all subdirectories and files of directory 
                 {
                     Check_Type(fs[i], i); //coloring
-                    Console.WriteLine("{0}. {1}", i+1, fs[i].Name); //ordering
+                    if (fs[i].GetType() == typeof(DirectoryInfo))
+                    {
+
+                      int len = ((DirectoryInfo)fs[i]).GetFileSystemInfos().Length;
+                      Console.WriteLine("{0}. {1}   {2}", i + 1, fs[i].Name, len); //ordering
+                    }
+                    else
+                    Console.WriteLine("{0}. {1}   ", i+1, fs[i].Name); //ordering
                 }
             }
             public void Start() //main function to run prog
@@ -161,6 +168,16 @@ namespace Task1
                             string end = d.Parent.FullName + '/' + name;
                             Directory.Move(@begin, @end);
                         }
+                    }
+                    if (consoleKey.Key == ConsoleKey.F3) //rename file and directory name
+                    {
+                        string beg = fs[cursor].FullName;
+                        DirectoryInfo dis = new DirectoryInfo(path);
+                        string en = dis.Parent.FullName + "/" +fs[cursor].Name;
+                        File.Move(beg, @en);
+                        File.Move(fs[cursor].FullName, ((FileInfo)fs[cursor]).Directory.Parent + fs[cursor].Name);
+
+                        
                     }
                 }
             }
