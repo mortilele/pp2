@@ -175,7 +175,7 @@ namespace Task1
                         DirectoryInfo dis = new DirectoryInfo(path);
                         string en = dis.Parent.FullName + "/" +fs[cursor].Name;
                         File.Move(beg, @en);
-                        File.Move(fs[cursor].FullName, ((FileInfo)fs[cursor]).Directory.Parent + fs[cursor].Name);
+                        File.Move(fs[cursor].FullName, ((FileInfo)fs[cursor]).Directory.Parent + fs[cursor].Name);.
 
                         
                     }
