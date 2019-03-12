@@ -27,7 +27,7 @@ namespace Main
             g_objects.Add(snake);
             g_objects.Add(food);
             g_objects.Add(wall);
-            while (food.IsCollisionWithObject(snake) || food.IsCollisionWithObject(wall))
+            while (food.IsCollisionWithObject(snake) && food.IsCollisionWithObject(wall))
                 food.Generate();
             wall.Level(wall.index);
         }
@@ -42,7 +42,7 @@ namespace Main
             g_objects.Add(snake);
             g_objects.Add(food);
             g_objects.Add(wall);
-            while (food.IsCollisionWithObject(snake) || food.IsCollisionWithObject(wall))
+            while (food.IsCollisionWithObject(snake) && food.IsCollisionWithObject(wall))
                 food.Generate();
             wall.index = i;
             wall.Level(wall.index);
