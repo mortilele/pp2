@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 
 namespace AdvancedSnake
 {
-    public class Interface
+    public class Interface : Game
     {
         public string[] menu =
         {
@@ -40,7 +40,7 @@ namespace AdvancedSnake
             Console.WriteLine("W E L C O M E");
             Console.SetCursorPosition(26, 18);
             Console.WriteLine("Made by Akhmetov");
-            int x = 30, y = 11; 
+            int x = 30, y = 11;
             for (int i = 0; i < 5; i++)
             {
                 Console.SetCursorPosition(x, y++);
@@ -89,10 +89,11 @@ namespace AdvancedSnake
             if (cursor == 1)
             {
                 Game game = new Game();
-                game.Start();
+                game.Register();
             }
             if (cursor == 2)
             {
+                ShowScores();
             }
             if (cursor == 3)
             {
@@ -105,6 +106,22 @@ namespace AdvancedSnake
             }
         }
 
+        public void ShowScores()
+        {
+            Console.Clear();
+            UserList userlist = Get();
+            int x = 27, y = 10;
+            Console.SetCursorPosition(x+3, y++);
+            Console.WriteLine("Scoreboard");
+            for (int i = 0; i < Math.Min(5, userlist.users.Count); i++)
+            {
+                Console.SetCursorPosition(x, ++y);
+                Console.WriteLine("{0}| {1} - {2}", i+1, userlist.users[i].username, userlist.users[i].userscore);
+            }
+            Console.ReadKey();
+        }
+
+        
         public Game GameContinue()
         {
             FileStream fs = new FileStream("loader.xml", FileMode.OpenOrCreate, FileAccess.ReadWrite);

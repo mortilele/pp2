@@ -38,7 +38,6 @@ namespace AdvancedSnake
                 body.Add(new Point(0, i));
                 body.Add(new Point(68, i));
             }
-
             string filename = levels[current];
             StreamReader sr = new StreamReader(filename);
             string[] rows = sr.ReadToEnd().Split('\n');

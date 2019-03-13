@@ -51,6 +51,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Snake.cs" />
+    <Compile Include="UserData.cs" />
+    <Compile Include="UserList.cs" />
     <Compile Include="Wall.cs" />
   </ItemGroup>
   <ItemGroup>

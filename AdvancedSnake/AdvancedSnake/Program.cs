@@ -8,10 +8,12 @@ namespace AdvancedSnake
 {
     class Program
     {
+        
         static void Main(string[] args)
         {
             Console.CursorVisible = false;
-            Console.SetWindowSize(70, 30);
+            Console.SetWindowSize(70, 27);
+            Console.SetBufferSize(70, 27);
             Interface menu = new Interface();
             menu.ShowMenu();
             Console.ReadKey();
