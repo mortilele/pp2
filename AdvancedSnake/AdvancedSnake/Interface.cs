@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.IO;
 using System.Xml.Serialization;
 
@@ -121,7 +121,6 @@ namespace AdvancedSnake
             Console.ReadKey();
         }
 
-        
         public Game GameContinue()
         {
             FileStream fs = new FileStream("loader.xml", FileMode.OpenOrCreate, FileAccess.ReadWrite);
@@ -157,5 +156,108 @@ namespace AdvancedSnake
             ShowLevels();
         }
 
+        public void Shtori()
+        {/*Animation of Shtori
+            Console.Clear();
+            for (int j = 0; j <= 35; j++)
+            {
+
+                for (int i = 0; i < 25; i++)
+                {
+                    Console.SetCursorPosition(j, i);
+                    Console.WriteLine("|");
+                    Console.SetCursorPosition(69 - j, i);
+                    Console.WriteLine("|");
+                }
+            }
+            */
+            int n = 26;
+            int m = 68;
+            int x_0 = 4;
+            int y_0 = 2;
+            int x = 4;
+            int y = 2;
+            while (x_0 != m && y_0 != n) 
+            {
+                if (y == y_0)
+                {
+                    while (x < m)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.SetCursorPosition(x, y_0);
+                        Console.Write("@");
+                        x++;
+                        Thread.Sleep(1);
+                    }
+                    y_0++;
+                }
+                if (x == m)
+                {
+                    while (y < n)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.SetCursorPosition(m - 1, y);
+                        Console.Write("@");
+                        y++;
+                        Thread.Sleep(2);
+                    }
+                    m--;
+                }
+                if (y == n)
+                {
+                    while (x > x_0)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.SetCursorPosition(x - 1, n - 1);
+                        Console.Write("@");
+                        x--;
+                        Thread.Sleep(1);
+                    }
+                    n--;
+                }
+                if (x == x_0)
+                {
+                    while (y > y_0)
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.SetCursorPosition(x_0, y - 1);
+                        Console.Write("@");
+                        y--;
+                        Thread.Sleep(2);
+                    }
+                    x_0++;
+                }
+            }
+
+          
+            Thread.Sleep(500);
+
+            for (int j = 35; j >= 0; j--)
+            {
+                for (int i = 0; i < 26; i++)
+                {
+                    Console.SetCursorPosition(j, i);
+                    Console.WriteLine(" ");
+                    Console.SetCursorPosition(69 - j, i);
+                    Console.WriteLine(" ");
+                }
+                Thread.Sleep(50);
+            }
+            TextAnimate();
+        }
+
+        public void TextAnimate()
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.SetCursorPosition(27, 9);
+            string text = "W E L C O M E";
+            for (int i = 0; i < text.Length; i++)
+            {
+                Thread.Sleep(80);
+                Console.Write(text[i]);
+            }
+            Thread.Sleep(500);
+            ShowMenu();
+        }
     }
 }
