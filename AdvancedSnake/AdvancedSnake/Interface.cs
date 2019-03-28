@@ -231,10 +231,10 @@ namespace AdvancedSnake
 
           
             Thread.Sleep(500);
-
+            Console.BackgroundColor = ConsoleColor.DarkBlue ;
             for (int j = 35; j >= 0; j--)
             {
-                for (int i = 0; i < 26; i++)
+                for (int i = 2; i < 26; i++)
                 {
                     Console.SetCursorPosition(j, i);
                     Console.WriteLine(" ");
@@ -243,6 +243,7 @@ namespace AdvancedSnake
                 }
                 Thread.Sleep(50);
             }
+            Console.Clear();
             TextAnimate();
         }
 

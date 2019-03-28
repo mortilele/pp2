@@ -10,10 +10,8 @@ namespace AdvancedSnake
     {
         static void Main(string[] args)
         {
-            Console.CursorVisible = false;
-            Console.Clear();
-            Console.SetWindowSize(70, 27);
-            Console.SetBufferSize(70, 27);
+            Matrix m = new Matrix();
+            m.Start();
             Interface menu = new Interface();
             menu.Shtori();
         }
