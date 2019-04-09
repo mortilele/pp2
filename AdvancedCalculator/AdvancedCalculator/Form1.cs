@@ -15,6 +15,7 @@ namespace AdvancedCalculator
         TextBox cons = new TextBox();  //global vars
         double temp, temp2;
         string last;
+        bool biop;
         ComboBox cmb = new ComboBox();
         List<double> memory = new List<double>() { 0 };
 
@@ -169,6 +170,7 @@ namespace AdvancedCalculator
                 temp = Convert.ToDouble(cons.Text);
                 cons.Text = "";
                 last = "sum";
+                biop = true;
             }
 
             if (btn.Text == "-" && cons.Text != "")
@@ -176,6 +178,7 @@ namespace AdvancedCalculator
                 temp = Convert.ToDouble(cons.Text);
                 cons.Text = "";
                 last = "sub";
+                biop = true;
             }
 
             if (btn.Text == "*" && cons.Text != "")
@@ -183,6 +186,7 @@ namespace AdvancedCalculator
                 temp = Convert.ToDouble(cons.Text);
                 cons.Text = "";
                 last = "multi";
+                biop = true;
             }
 
             if (btn.Text == "/" && cons.Text != "")
@@ -190,6 +194,7 @@ namespace AdvancedCalculator
                 temp = Convert.ToDouble(cons.Text);
                 cons.Text = "";
                 last = "div";
+                biop = true;
             }
 
             if (btn.Text == "C")
@@ -247,21 +252,29 @@ namespace AdvancedCalculator
                 temp = Convert.ToDouble(cons.Text);
                 cons.Text = "";
                 last = "pow";
+                biop = true;
             }
             if (btn.Text == "=" && cons.Text != "")
             {
-               temp2 = Convert.ToDouble(cons.Text);
-                if (last == "sum")
-                    temp += temp2;
-                if (last == "sub")
-                    temp -= temp2;
-                if (last == "div")
-                    temp /= temp2;
-                if (last == "multi")
-                    temp *= temp2;
-                if (last == "pow")
-                    temp = Math.Pow(temp, temp2);
-                cons.Text = Convert.ToString(temp);
+               double result = 0;
+                if (!biop)
+                {
+                    temp = temp2;
+                    biop = true;
+                }
+                temp2 = Convert.ToDouble(cons.Text);
+              
+                    if (last == "sum")
+                        result = temp2 + temp;
+                    if (last == "sub")
+                        result = temp - temp2;
+                    if (last == "div")
+                        result = temp / temp2;
+                    if (last == "multi")
+                        result = temp * temp2;
+                    if (last == "pow")
+                        result = Math.Pow(temp, temp2);
+                cons.Text = Convert.ToString(result);
             }
         }
 
