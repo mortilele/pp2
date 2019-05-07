@@ -49,7 +49,7 @@ namespace AdvancedCalculator
                 { "MC", "MR", "M+", "M-", "MS" };
             string[] sym = new string[]
                 { "Mono:sin", "Mono:cos", "Mono:1/x", "Mono:√",
-                  "Mono:C", "Bi:x^y", "Mono:<=", "Bi:/",
+                  "Mono:C", "Bi:gcd", "Mono:<=", "Bi:/",
                   "Num:7", "Num:8", "Num:9", "Bi:*",
                   "Num:4", "Num:5", "Num:6", "Bi:-",
                   "Num:1", "Num:2", "Num:3", "Bi:+",
@@ -247,11 +247,11 @@ namespace AdvancedCalculator
 
             }
 
-            if (btn.Text == "x^y" && cons.Text != "")
+            if (btn.Text == "gcd" && cons.Text != "")
             {
                 temp = Convert.ToDouble(cons.Text);
                 cons.Text = "";
-                last = "pow";
+                last = "gcd";
                 biop = true;
             }
             if (btn.Text == "=" && cons.Text != "")
@@ -263,7 +263,16 @@ namespace AdvancedCalculator
                     biop = true;
                 }
                 temp2 = Convert.ToDouble(cons.Text);
-              
+                if (last == "gcd")
+                {
+                    int g = Convert.ToInt32(temp2);
+                    int z = Convert.ToInt32(temp);
+                    if (gcd(g, z) == 1)
+                    {
+                        cons.Text = "1";
+                    }
+                    else cons.Text = gcd(g, z) + "";
+                }
                     if (last == "sum")
                         result = temp2 + temp;
                     if (last == "sub")
@@ -274,8 +283,14 @@ namespace AdvancedCalculator
                         result = temp * temp2;
                     if (last == "pow")
                         result = Math.Pow(temp, temp2);
-                cons.Text = Convert.ToString(result);
             }
+        }
+
+        public int gcd(int a, int b)
+        {
+            if (b == 0)
+                return a;
+            else return gcd(b, a % b);
         }
 
         public void Mouse_Enter(object sender, EventArgs e) //Hover

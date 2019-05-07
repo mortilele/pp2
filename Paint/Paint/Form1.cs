@@ -12,6 +12,7 @@ namespace Paint
 {
     enum Tool
     {
+        Cursor,
         Pencil,
         Line,
         Rectangle,
@@ -28,10 +29,12 @@ namespace Paint
         Graphics graphics;
         Point first_p;
         Point second_p;
+        figure moving = new figure();
         int size = 1;
         Color color = Color.Black;
         Pen pen = new Pen(Color.Black, 1);
-        Tool activeTool = Tool.Star;
+        List<figure> figures = new List<figure>();
+        Tool activeTool = Tool.Pencil;
         public Form1()
         {
             InitializeComponent();
@@ -71,6 +74,8 @@ namespace Paint
                 {
                     case Tool.Pencil:
                         graphics.DrawLine(pen, first_p, second_p);
+                        figure fig = new figure(first_p, second_p, "pencil", pen);
+                        figures.Add(fig);
                         first_p = second_p;
                         break;
                     default:
@@ -106,6 +111,7 @@ namespace Paint
             bitmap = new Bitmap(draw_area.Width, draw_area.Height);
             graphics = Graphics.FromImage(bitmap);
             graphics.Clear(Color.White);
+            figures = new List<figure>();
             draw_area.Image = bitmap;
         }
 
@@ -149,7 +155,7 @@ namespace Paint
             return res;
         }
 
-        public Point[] Star() //Omagad that i had did, so sad :(
+        public Point[] Star(Point first_p, Point second_p) //Omagad that i had did, so sad :(
         {
             int dif = (first_p.Y + second_p.Y) / 8;
             Point p1 = new Point();
@@ -186,7 +192,7 @@ namespace Paint
             return points;
         }
 
-        public Point[] Right_Triangle()
+        public Point[] Right_Triangle(Point first_p, Point second_p)
         {
             Point mid = new Point();
             mid.X = second_p.X;
@@ -195,7 +201,7 @@ namespace Paint
             return points;
         }
 
-        public Point[] Triangle()
+        public Point[] Triangle(Point first_p, Point second_p)
         {
             Point mid = new Point();
             mid.X = second_p.X + second_p.X - first_p.X;
@@ -206,27 +212,48 @@ namespace Paint
 
         private void draw_area_MouseUp(object sender, MouseEventArgs e)
         {
+            figure fig;
             switch (activeTool)
             {
                 case Tool.Line:
-                    second_p = e.Location;
                     graphics.DrawLine(pen, first_p, second_p);
-                    draw_area.Refresh();
+                    fig = new figure(first_p, second_p, "line", pen);
+                    figures.Add(fig);
                     break;
                 case Tool.Rectangle:
                     graphics.DrawRectangle(pen, GetRectangle(first_p, second_p));
+                    fig = new figure(first_p, second_p, "rectangle", pen);
+                    figures.Add(fig);
                     break;
                 case Tool.Ellipse:
                     graphics.DrawEllipse(pen, first_p.X, first_p.Y, second_p.X - first_p.X, second_p.Y - first_p.Y);
+                    fig = new figure(first_p, second_p, "ellipse", pen);
+                    figures.Add(fig);
                     break;
                 case Tool.Star:
-                    graphics.DrawPolygon(pen, Star());
+                    graphics.DrawPolygon(pen, Star(first_p, second_p));
+                    fig = new figure(first_p, second_p, "star", pen);
+                    figures.Add(fig);
                     break;
                 case Tool.Triangle:
-                    graphics.DrawPolygon(pen, Triangle());
+                    graphics.DrawPolygon(pen, Triangle(first_p, second_p));
+                    fig = new figure(first_p, second_p, "triangle", pen);
+                    figures.Add(fig);
                     break;
                 case Tool.Right_Triangle:
-                    graphics.DrawPolygon(pen, Right_Triangle());
+                    graphics.DrawPolygon(pen, Right_Triangle(first_p, second_p));
+                    fig = new figure(first_p, second_p, "right-triangle", pen);
+                    figures.Add(fig);
+                    break;
+                case Tool.Cursor:
+                    if (moving.NULL == false)
+                    {
+                        figures.Add(moving);
+                        moving = new figure();
+                        first_p = new Point();
+                        second_p = new Point();
+                        Draw(graphics);
+                    }
                     break;
                 default:
                     break;
@@ -249,16 +276,84 @@ namespace Paint
                     e.Graphics.DrawEllipse(pen, first_p.X, first_p.Y, second_p.X - first_p.X, second_p.Y - first_p.Y);
                     break;
                 case Tool.Star:
-                    e.Graphics.DrawPolygon(pen, Star());
+                    e.Graphics.DrawPolygon(pen, Star(first_p, second_p));
                     break;
                 case Tool.Triangle:
-                    e.Graphics.DrawPolygon(pen, Triangle());
+                    e.Graphics.DrawPolygon(pen, Triangle(first_p, second_p));
                     break;
                 case Tool.Right_Triangle:
-                    e.Graphics.DrawPolygon(pen, Right_Triangle());
+                    e.Graphics.DrawPolygon(pen, Right_Triangle(first_p,second_p));
+                    break;
+                case Tool.Cursor:
+                    if (moving.NULL == true)
+                    {
+                        for (int i = 0; i < figures.Count; i++)
+                        {
+                            if (figures[i].type != "pencil")
+                            {
+                                if (first_p.X >= figures[i].first.X && first_p.X <= figures[i].second.X && first_p.Y >= figures[i].first.Y && first_p.Y <= figures[i].second.Y)
+                                {
+                                    moving = new figure(figures[i].first, figures[i].second, figures[i].type, figures[i].pen);
+                                    figures.RemoveAt(i);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        int h = Math.Abs(moving.second.Y - moving.first.Y);
+                        int w = Math.Abs(moving.second.X - moving.first.X);
+                        moving.first = second_p;
+                        moving.second.X = moving.first.X + w;
+                        moving.second.Y = moving.first.Y + h;
+                        first_p = second_p;
+                        Figure_Draw(moving.first, moving.second, moving.type, e.Graphics, moving.pen);
+                    }
                     break;
                 default:
                     break;
+            }
+        }
+
+        public void Draw(Graphics graphics)
+        {
+            bitmap = new Bitmap(draw_area.Width, draw_area.Height);
+            graphics = Graphics.FromImage(bitmap);
+            graphics.Clear(Color.White);
+            draw_area.Image = bitmap;
+            for (int i = 0; i < figures.Count; i++)
+            {
+                Figure_Draw(figures[i].first, figures[i].second, figures[i].type, graphics, figures[i].pen);
+            }
+        }
+
+        public void Figure_Draw(Point first, Point second, string type, Graphics graphics, Pen p)
+        {
+            Pen kalam = p;
+            if (type == "rectangle")
+            {
+                graphics.DrawRectangle(kalam, GetRectangle(first, second));
+            }
+            if (type == "star")
+            {
+                graphics.DrawPolygon(kalam, Star(first, second));
+            }
+            if (type == "triangle")
+            {
+                graphics.DrawPolygon(kalam, Triangle(first, second));
+            }
+            if (type == "right-triangle")
+            {
+                graphics.DrawPolygon(kalam, Right_Triangle(first, second));
+            }
+            if (type == "line" || type == "pencil")
+            {
+                graphics.DrawLine(kalam, first,second);
+            }
+            if (type == "ellipse")
+            {
+                graphics.DrawEllipse(kalam, first.X, first.Y, second.X - first.X, second.Y - first.Y);
             }
         }
 
@@ -294,6 +389,16 @@ namespace Paint
         private void fill_click_Click(object sender, EventArgs e)
         {
             activeTool = Tool.Fill2;
+        }
+
+        private void dif_line_pick_Click(object sender, EventArgs e)
+        {
+            activeTool = Tool.Cursor;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
